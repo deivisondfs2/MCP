@@ -8,70 +8,112 @@ A small TypeScript project that compiles to `build/index.js`. This repository co
 - **Built output:** `build/index.js`
 - **Build tool:** TypeScript compiler (`tsc`)
 
-**Quick Start**
+# Upside‑Down
+
+A concise, focused TypeScript example that demonstrates running a local MCP (Model Context Protocol) server and integrating with MCP-aware desktop apps.
+
+![Upside‑Down preview](./images/claude_reverse_example.svg)
+
+## Why this repo?
+
+- Shows a minimal, real-world pattern to expose a Node process as an MCP server so desktop assistants (or other MCP clients) can invoke tools and exchange structured context.
+
+## Highlights
+
+- **Language:** TypeScript
+- **Source:** `src/index.ts`
+- **Built output:** `build/index.js`
+- **Build:** `npm run build` (TypeScript compiler)
+- **Libraries:** `@modelcontextprotocol/sdk`, `zod`
+
+## Table of contents
+
+- [Screenshots](#screenshots)
+- [What is MCP?](#what-is-mcp)
+- [Quick start](#quick-start)
+- [Configure your desktop app (example)](#configure-your-desktop-app-example)
+- [Development tips](#development-tips)
+- [Contributing](#contributing)
+
+## Screenshots
+
+Below are three illustrations (screenshot placeholders) showing: (1) a tool invocation and reversed-text response, (2) the desktop app MCP servers view, and (3) an example `claude_desktop_config.json` snippet that registers the local server.
+
+### Reverse-string tool
+
+![Reverse tool example](./images/claude_reverse_example.svg)
+
+*A request/response example for a simple reverse-string tool.*
+
+### Local MCP servers (Desktop)
+
+![Local MCP servers](./images/local_mcp_servers.svg)
+
+*How a local MCP server appears in the desktop app settings.*
+
+### Desktop config snippet
+
+![Claude config snippet](./images/claude_config_snippet.svg)
+
+*An example `claude_desktop_config.json` entry — replace the path in `args` with your build output.*
+
+## What is MCP?
+
+The Model Context Protocol (MCP) is a convention and SDK for exchanging structured context and metadata between tools and models. It allows model-driven UIs and desktop assistants to discover and invoke local services (tools) with clear contracts.
+
+## Quick start
 
 Prerequisites:
-- Node.js (v18+ recommended)
-- npm (or a compatible package manager)
 
-Install dependencies:
+- Node.js v18+ (recommended)
+- npm
+
+Install dependencies and build:
 
 ```bash
+cd upside-down
 npm install
-```
-
-Build the project:
-
-```bash
 npm run build
 ```
 
-Run the built output:
+Run the compiled server (example):
 
 ```bash
 node build/index.js
 ```
 
-**Scripts**
-- `npm run build` — compile TypeScript to JavaScript using `tsc`.
+### Example desktop config
 
-If you add runtime scripts (start, dev, test) to `package.json`, document them here.
+If your desktop assistant expects a JSON config (example `claude_desktop_config.json`), point the `args` to the built entry, e.g.:
 
-**Project Structure**
+```json
+{
+	"mcpServers": {
+		"upside-down-MCP": {
+			"command": "node",
+			"args": ["/absolute/path/to/upside-down/build/index.js"]
+		}
+	}
+}
+```
 
-- `src/` — TypeScript source files (main entry: `src/index.ts`).
-- `build/` — Compiled JavaScript output (output of `tsc`).
-- `package.json` — Project metadata and scripts.
-- `tsconfig.json` — TypeScript configuration.
+## Development tips
 
-**Development Notes**
-
-- The project uses `type: "module"` in `package.json`, so Node ESM rules apply.
-- Dependencies installed:
-  - `@modelcontextprotocol/sdk` — Model Context Protocol SDK used by the project.
-  - `zod` — validation schema library.
-
-Dev dependencies include `typescript` and `@types/node` for compilation and typing.
-
-If you plan to add a development watch flow, consider adding a script like:
+- Add a `dev` script for iterative development (example using `ts-node` + `nodemon`):
 
 ```bash
 npm install -D nodemon ts-node
 npm set-script dev "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+
+npm run dev
 ```
 
-**Contributing**
+- This project uses `type: "module"` in `package.json`. Use ESM imports and ensure Node is recent enough.
 
-Contributions are welcome. Please open issues or pull requests. For bigger changes, open an issue first to discuss the design.
+## Contributing
 
-**License**
+- Improvements, bug reports, and additional example integrations are welcome. Open an issue or PR.
 
-This project currently lists `ISC` in `package.json` — update the `LICENSE` file if you need a different license.
+## License
 
-**Contact / Support**
-
-If this repo is part of a larger workspace, reference the workspace docs or the maintainer for help.
-
----
-
-File created: `README.md` — placed at project root.
+This repo lists `ISC` in `package.json`. Add a `LICENSE` file if you want to clarify terms.
